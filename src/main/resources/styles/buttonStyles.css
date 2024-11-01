@@ -1,0 +1,38 @@
+
+/* style.css */
+.button {
+    -fx-background-color: transparent;
+
+}
+.button:hover {
+    -fx-background-color: #93ff93; /* Optional hover color */
+}
+
+
+
+.button.selected {
+    -fx-background-color:#93ff93 ;
+
+}
+
+
+/* Add New Student Button Style */
+.add-student-button {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 2px;
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+.add-student-button:hover {
+    -fx-background-color: #93ff93; /* Darker blue on hover */
+}
+
+.add-student-button:pressed {
+    -fx-background-color: #20c720; /* Even darker blue on press */
+}

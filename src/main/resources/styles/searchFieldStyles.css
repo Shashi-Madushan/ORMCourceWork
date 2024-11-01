@@ -1,0 +1,14 @@
+.search-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d0d4d9;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 4px 6px;
+    -fx-prompt-text-fill: #888888;
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+.search-field:focused {
+    -fx-border-color: #93ff93; /* Blue border on focus */
+}
