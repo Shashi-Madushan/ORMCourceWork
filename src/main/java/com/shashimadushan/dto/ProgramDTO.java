@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -14,7 +16,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class ProgramDTO {
-    private Long id;
 
 
     private String programId;
@@ -29,5 +30,12 @@ public class ProgramDTO {
     private double fee;
 
 
-    private Set<Enrolment> enrollments = new HashSet<>();
+    private List<Enrolment> enrollments;
+
+    public ProgramDTO(String id, String name, String duration, String fee) {
+        this.programId = id;
+        this.name = name;
+        this.durationMonths = Integer.parseInt(duration);
+        this.fee = Double.parseDouble(fee);
+    }
 }

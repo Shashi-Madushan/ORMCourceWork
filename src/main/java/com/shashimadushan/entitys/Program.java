@@ -6,33 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity
+import java.util.List;
+
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Program {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
     private String programId;
-
-
     private String name;
-
-
-    private int durationMonths;
-
-
+    private int duration;
     private double fee;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Enrolment> enrollments = new HashSet<>();
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Enrolment> enrollments;
 
     // Getters and setters
 

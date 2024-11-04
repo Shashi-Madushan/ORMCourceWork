@@ -17,5 +17,7 @@ public interface ProgramDAO extends SuperDAO {
     public void deleteProgram(Program program);
 
     public List<Program> searchPrograms(String query);
+    public Program getProgram(String programId);
+    public Long getProgramCount();
 
 }

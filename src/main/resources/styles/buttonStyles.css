@@ -1,17 +1,22 @@
 
 /* style.css */
 .button {
-    -fx-background-color: transparent;
-
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-text-fill: #000000;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 .button:hover {
-    -fx-background-color: #93ff93; /* Optional hover color */
+    -fx-background-color: #5582ff; /* Optional hover color */
+    -fx-text-fill: #000000;
 }
 
 
 
 .button.selected {
-    -fx-background-color:#93ff93 ;
+    -fx-background-color: #6189f8;
 
 }
 
@@ -29,10 +34,29 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
-.add-student-button:hover {
-    -fx-background-color: #93ff93; /* Darker blue on hover */
+/* buttonStyles.css */
+.update-button {
+    -fx-background-color: #20c720; /* Green */
+    -fx-text-fill: white;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
 }
 
-.add-student-button:pressed {
-    -fx-background-color: #20c720; /* Even darker blue on press */
+.delete-button {
+    -fx-background-color: #ff8080; /* Red */
+    -fx-text-fill: white;
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 5;
 }
+
+.update-button:hover {
+    -fx-background-color: #7bff7f;
+    -fx-text-fill: black;
+}
+
+.delete-button:hover {
+    -fx-background-color: #f63a2c;
+}
+
+
+

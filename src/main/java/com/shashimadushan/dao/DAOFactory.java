@@ -2,6 +2,7 @@ package com.shashimadushan.dao;
 
 import com.shashimadushan.dao.impl.EnrolmentDAOImpl;
 import com.shashimadushan.dao.impl.ProgramDAOImpl;
+import com.shashimadushan.dao.impl.StudenDAOImpl;
 import com.shashimadushan.dao.impl.UserDAOImpl;
 
 public class DAOFactory {
@@ -12,7 +13,7 @@ public class DAOFactory {
     public static SuperDAO getDAO(DAOTypes type) {
         switch (type) {
             case STUDENT:
-                return new ProgramDAOImpl();
+                return new StudenDAOImpl();
             case PROGRAM:
                 return new ProgramDAOImpl();
 

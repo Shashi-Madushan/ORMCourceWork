@@ -15,4 +15,6 @@ public interface UserBO extends SuperBO {
     public void deleteUser(UserDTO userDTO);
 
     public List<UserDTO> searchUsers(String query);
+
+    public boolean authenticateUser(UserDTO userDTO);
 }

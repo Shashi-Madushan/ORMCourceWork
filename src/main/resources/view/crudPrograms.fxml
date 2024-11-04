@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shashimadushan.controllers.CrudProgramsController">
+   <children>
+      <AnchorPane layoutX="336.0" layoutY="12.0" prefHeight="378.0" prefWidth="253.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 12; -fx-border-radius: 12;" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="12.0">
+         <children>
+            <Label layoutX="67.0" layoutY="14.0" text="Add  Programs ">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="18.0" layoutY="49.0" text="Program ID" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="21.0" layoutY="106.0" text="Name" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="20.0" layoutY="169.0" text="Duration" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="228.0" text="Fee" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="idTxtField" layoutX="18.0" layoutY="68.0" prefHeight="25.0" prefWidth="211.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="nameTxtField" layoutX="18.0" layoutY="122.0" prefHeight="25.0" prefWidth="211.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="durationTxtField" layoutX="21.0" layoutY="187.0" prefHeight="25.0" prefWidth="211.0" AnchorPane.leftAnchor="20.0" />
+            <TextField fx:id="feeTxtField" layoutX="19.0" layoutY="250.0" prefHeight="25.0" prefWidth="211.0" AnchorPane.leftAnchor="20.0" />
+            <JFXButton fx:id="addBtn" buttonType="RAISED" layoutX="89.0" layoutY="321.0" onAction="#addBtnOnAction" prefHeight="25.0" prefWidth="81.0" stylesheets="@../styles/buttonStyles.css" text="Add" AnchorPane.bottomAnchor="32.0">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      <JFXButton buttonType="RAISED" layoutX="1.0" layoutY="1.0" onAction="#bacBtnOnAction" prefHeight="34.0" prefWidth="44.0" text="" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+         <graphic>
+            <ImageView fitHeight="29.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons8-back-button-50.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>

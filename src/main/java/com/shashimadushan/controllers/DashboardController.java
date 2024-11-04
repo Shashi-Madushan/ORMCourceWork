@@ -7,13 +7,18 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import lombok.Data;
 
 import java.io.IOException;
 
 import static com.shashimadushan.utils.ButtonUtils.setupButtonAnimation;
 import static com.shashimadushan.utils.ButtonUtils.setupButtonClick;
+import static com.shashimadushan.utils.GlobelVars.userRole;
 
+@Data
 public class DashboardController {
 
     @FXML
@@ -38,8 +43,15 @@ public class DashboardController {
 
     @FXML
     private JFXButton usersBtn;
+    Stage stage;
 
     public void initialize() {
+        loadView("home");
+        if (userRole == "Admin") {
+            usersBtn.setVisible(true);
+        }else {
+            usersBtn.setVisible(false);
+        }
         initButtonAnimation();
     }
 
@@ -58,68 +70,122 @@ public class DashboardController {
 
     @FXML
     void dashBtnOnAction(ActionEvent event) {
-
+        setupButtonClick(dashbordBtn);
+        loadView("home");
     }
 
     @FXML
     void logOutBtnOnAction(ActionEvent event) {
-
+        loardLoginPage();
     }
+
+
 
     @FXML
     void programBtnOnACtion(ActionEvent event) {
-        loadProgramsView();
+        loadView("programs");
+        setupButtonClick(programsBtn);
     }
 
     @FXML
     void reportsBtnOnAction(ActionEvent event) {
-
+        setupButtonClick(repotsBtn);
     }
 
     @FXML
     void studentBtnOnAction(ActionEvent event) {
-       loadStudentsView();
+        loadView("students");
         setupButtonClick(studBtn);
     }
 
     @FXML
     void usersBtnOnAction(ActionEvent event) {
-
+        setupButtonClick(usersBtn);
+        loadView("user");
     }
 
-    private void loadStudentsView(){
+    private void loardLoginPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/studentsHome.fxml"));
-            AnchorPane anchorPane = loader.load();
+            // Load the FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+
+            Scene scene = new Scene(loader.load());
+            LoginController controller = loader.getController();
+            controller.setStage(stage);
+
+            stage.setScene(scene);
+            stage.setTitle("Login");
+            stage.setResizable(false);
 
 
-            AnchorPane.setTopAnchor(anchorPane, 3.0);
-            AnchorPane.setBottomAnchor(anchorPane, 3.0);
-            AnchorPane.setLeftAnchor(anchorPane, 3.0);
-            AnchorPane.setRightAnchor(anchorPane, 3.0);
-
-            mainPane.getChildren().setAll(anchorPane);
-
-        } catch (IOException e) {
+            stage.show();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    private void loadProgramsView(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/programsHome.fxml"));
-            AnchorPane anchorPane = loader.load();
-
-
-            AnchorPane.setTopAnchor(anchorPane, 3.0);
-            AnchorPane.setBottomAnchor(anchorPane, 3.0);
-            AnchorPane.setLeftAnchor(anchorPane, 3.0);
-            AnchorPane.setRightAnchor(anchorPane, 3.0);
-
-            mainPane.getChildren().setAll(anchorPane);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void loadView(String viewType) {
+    try {
+        String resourcePath = "/view/";
+        switch (viewType) {
+            case "home":
+                resourcePath += "home.fxml";
+                break;
+            case "students":
+                resourcePath += "studentsHome.fxml";
+                break;
+            case "programs":
+                resourcePath += "programsHome.fxml";
+                break;
+            case "crudpro":
+                resourcePath += "crudPrograms.fxml";
+                break;
+            case "user":
+                resourcePath += "crudUser.fxml";
+                break;
+            case "crudStd":
+                resourcePath += "crudStudent.fxml";
+                break;
+            default:
+                System.out.println("Invalid view type");
+                return;
         }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+        AnchorPane anchorPane = loader.load();
+
+        Object controller = loader.getController();
+
+        if (controller instanceof StudentsHomeController) {
+            StudentsHomeController fxmlController = (StudentsHomeController) controller;
+            fxmlController.setDashboardController(this);
+        } else if (controller instanceof CrudStudentController) {
+            CrudStudentController fxmlController = (CrudStudentController) controller;
+            fxmlController.setDashboardController(this);
+        } else if (controller instanceof ProgramsHomeController) {
+            ProgramsHomeController fxmlController = (ProgramsHomeController) controller;
+            fxmlController.setDashboardController(this);
+        }  else if (controller instanceof CrudProgramsController) {
+            CrudProgramsController fxmlController = (CrudProgramsController) controller;
+            fxmlController.setDashboardController(this);
+        } else if (controller instanceof CrudUserController) {
+            CrudUserController fxmlController = (CrudUserController) controller;
+            fxmlController.setDashboardController(this);
+        } else if (controller instanceof HomeController) {
+            HomeController fxmlController = (HomeController) controller;
+            fxmlController.setDashboardController(this);
+        } else {
+            System.out.println("Controller is not an instance of YourFXMLControllerClass");
+        }
+
+        AnchorPane.setTopAnchor(anchorPane, 0.0);
+        AnchorPane.setBottomAnchor(anchorPane, 0.0);
+        AnchorPane.setLeftAnchor(anchorPane, 0.0);
+        AnchorPane.setRightAnchor(anchorPane, 0.0);
+
+        mainPane.getChildren().setAll(anchorPane);
+
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 }

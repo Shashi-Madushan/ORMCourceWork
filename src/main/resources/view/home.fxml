@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="442.0" prefWidth="698.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shashimadushan.controllers.HomeController">
+   <children>
+      <HBox prefHeight="442.0" prefWidth="698.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="442.0" prefWidth="443.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 15; -fx-border-radius: 15;" HBox.hgrow="ALWAYS">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="110.0" prefWidth="417.0" style="-fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="14.0">
+                     <children>
+                        <Label layoutX="21.0" layoutY="12.0" text="Hello ! ," AnchorPane.leftAnchor="21.0" AnchorPane.topAnchor="12.0">
+                           <font>
+                              <Font name="Cambria" size="33.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="userNameLbel" layoutX="130.0" layoutY="30.0" text="Admin" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="30.0">
+                           <font>
+                              <Font name="Calibri" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="22.0" layoutY="66.0" text="Wellcome Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="22.0">
+                           <font>
+                              <Font name="Cambria" size="20.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="101.0" fitWidth="116.0" layoutX="311.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="5.0">
+                           <image>
+                              <Image url="@../assets/icons8-hospitality-100.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <VBox maxWidth="350.0" prefHeight="442.0" prefWidth="215.0" spacing="10.0" style="-fx-background-color: #F6F6F6; -fx-background-radius: 15; -fx-border-radius: 15;" HBox.hgrow="ALWAYS">
+               <children>
+                  <AnchorPane maxHeight="300.0" prefHeight="92.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" VBox.vgrow="ALWAYS" />
+                  <AnchorPane prefHeight="282.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" VBox.vgrow="ALWAYS">
+                     <children>
+                        <Label layoutX="20.0" layoutY="14.0" text="Quick Access" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="14.0">
+                           <font>
+                              <Font name="Arial" size="14.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="newStudentBtn" buttonType="RAISED" layoutX="20.0" layoutY="63.0" maxWidth="100.0" minHeight="50.0" onAction="#newStudentBtnOnACcion" prefHeight="0.0" prefWidth="128.0" stylesheets="@../styles/buttonStyles.css" text="New Student    " AnchorPane.bottomAnchor="178.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                           <graphic>
+                              <ImageView fitHeight="36.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons8-student-registration-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="newProgramBtn" buttonType="RAISED" layoutX="20.0" layoutY="130.0" maxWidth="100.0" minHeight="50.0" onAction="#newProgramBtnOnAction" prefHeight="0.0" stylesheets="@../styles/buttonStyles.css" text="New Program  " AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                           <graphic>
+                              <ImageView fitHeight="35.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons8-add-properties-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="StudentsBtn" buttonType="RAISED" layoutX="20.0" layoutY="197.0" maxWidth="100.0" minHeight="50.0" onAction="#StudentsBtnOnAction" prefHeight="0.0" stylesheets="@../styles/buttonStyles.css" text="Students           " AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons8-auditorium-100.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

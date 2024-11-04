@@ -18,4 +18,6 @@ public interface UserDAO extends SuperDAO {
 
     public List<User> searchUsers(String query);
 
+    public User getUser(String username);
+
 }

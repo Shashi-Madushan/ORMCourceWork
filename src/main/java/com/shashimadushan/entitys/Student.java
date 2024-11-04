@@ -1,38 +1,29 @@
 package com.shashimadushan.entitys;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.Date;
+import java.util.List;
+
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-
+    private String id;
     private String firstName;
-
-
     private String lastName;
-
-
+    private String address;
     private String email;
-
-
     private String phone;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Enrolment> enrollments = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Enrolment> enrollments;
+}
 
     // Getters and setters
-}
+
