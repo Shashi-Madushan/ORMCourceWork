@@ -7,6 +7,7 @@ import com.shashimadushan.dto.ProgramDTO;
 import com.shashimadushan.dto.StudentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -55,6 +56,7 @@ public class ProgramsHomeController {
         addButtonToTable();
         addTooltipToTable();
         addDoubleClickEventToTable();
+        setupProgramSearchFilter();
     }
 
     private void addTooltipToTable() {
@@ -76,6 +78,28 @@ public class ProgramsHomeController {
 
     private void loadProgramInfo(ProgramDTO selectedProgram) {
 
+    }
+
+    private void setupProgramSearchFilter() {
+        List<ProgramDTO> programs = programBO.getAllPrograms();
+        ObservableList<ProgramDTO> programList = FXCollections.observableArrayList(programs);
+
+        if (programList != null) {
+            FilteredList<ProgramDTO> filteredList = new FilteredList<>(programList, program -> true);
+
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredList.setPredicate(program -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all programs if the search box is empty
+                    }
+
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    return program.getName().toLowerCase().contains(lowerCaseFilter); // Filter by program name
+                });
+            });
+
+            programsTabel.setItems(filteredList);
+        }
     }
 
     private void addButtonToTable() {

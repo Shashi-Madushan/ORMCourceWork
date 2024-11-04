@@ -25,22 +25,17 @@ public class LoginController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
+    UserBO userBO = (UserBO) BOFactory.getBO(BOFactory.BOType.USER);
     @FXML
     void loginBtnOnAction(ActionEvent event) {
         String usename = usernameTextField.getText();
         String pwd = pwdTextField.getText();
-        String hashedPassword = null ;
-        if (pwd != null) {
-          hashedPassword =  PasswordUtil.hashPassword(pwd);
-        }
 
-        System.out.println(hashedPassword);
-        System.out.println(usename + pwd);
-        UserBO userBO = (UserBO) BOFactory.getBO(BOFactory.BOType.USER);
-        //boolean isAuth = userBO.authenticateUser(new UserDTO(usename, hashedPassword));
-        System.out.println(PasswordUtil.checkPassword(pwd, hashedPassword));
-        if (true) {
+
+
+        boolean isAuth = userBO.authenticateUser(new UserDTO(usename, pwd));
+
+        if (isAuth) {
            loadDashboarView();
         }
     }
@@ -54,6 +49,7 @@ public class LoginController {
 
             DashboardController dashboardController = loader.getController();
             dashboardController.setStage(this.stage);
+
             stage.setScene(scene);
             stage.setTitle("Dashboard");
             stage.setResizable(true);

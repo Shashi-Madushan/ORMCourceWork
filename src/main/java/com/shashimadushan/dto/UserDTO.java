@@ -28,4 +28,8 @@ public class UserDTO {
         this.roleName = roleName;
     }
 
+    public UserDTO(String usename, String hashedPassword) {
+        this.userName = usename;
+        this.password = hashedPassword;
+    }
 }

@@ -31,13 +31,13 @@ public class StudentBOImpl implements StudentBO {
 
     @Override
     public void updateStudent(StudentDTO studentDTO) {
-        Student student = new Student(studentDTO.getId(),studentDTO.getFirstName(),studentDTO.getLastName(),studentDTO.getAddress(),studentDTO.getPhone(),studentDTO.getEmail(),studentDTO.getEnrollments());
+        Student student = new Student(studentDTO.getId(),studentDTO.getFirstName(),studentDTO.getLastName(),studentDTO.getAddress(),studentDTO.getEmail(),studentDTO.getPhone(),studentDTO.getEnrollments());
         studentDAO.updateStudent(student);
     }
 
     @Override
     public void deleteStudent(StudentDTO studentDTO) {
-        Student student = new Student(studentDTO.getId(),studentDTO.getFirstName(),studentDTO.getLastName(),studentDTO.getAddress(),studentDTO.getPhone(),studentDTO.getEmail(),studentDTO.getEnrollments());
+        Student student = new Student(studentDTO.getId(),studentDTO.getFirstName(),studentDTO.getLastName(),studentDTO.getAddress(),studentDTO.getEmail(),studentDTO.getPhone(),studentDTO.getEnrollments());
         studentDAO.deleteStudent(student);
     }
 

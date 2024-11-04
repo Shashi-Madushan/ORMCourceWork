@@ -6,6 +6,7 @@ import com.shashimadushan.bo.custom.StudentBO;
 import com.shashimadushan.dto.StudentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +60,7 @@ public class StudentsHomeController {
         loadDataToTabel();
         addDoubleClickEventToTable();
         addTooltipToTable();
+        setupStudentSearchFilter();
     }
 
     private void addTooltipToTable() {
@@ -72,39 +74,61 @@ public class StudentsHomeController {
                 StudentDTO selectedStudent = studentTabel.getSelectionModel().getSelectedItem();
                 if (selectedStudent != null) {
                     System.out.println("2click on: " + selectedStudent.getId());
-                   loadCrudStudentViewWithStudentData(selectedStudent);
+                    loadCrudStudentViewWithStudentData(selectedStudent);
                 }
             }
         });
     }
 
-private void loadCrudStudentViewWithStudentData(StudentDTO student) {
-    AnchorPane mainPane = dashboardController.getMainPane();
-    try {
-        // Load the FXML file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/crudStudent.fxml"));
-        AnchorPane anchorPane = loader.load();
+    private void setupStudentSearchFilter() {
+        List<StudentDTO> students = studentBO.getAllStudents();
+        ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(students);
 
-        // Get the controller associated with the FXML
-        CrudStudentController controller = loader.getController();
-        controller.setInfoStudentDto(student);
-        controller.setDashboardController(this.dashboardController);
-        controller.lodeDatamode();
+        if (studentList != null) {
+            FilteredList<StudentDTO> filteredList = new FilteredList<>(studentList, student -> true);
 
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredList.setPredicate(student -> {
+                    if (newValue == null || newValue.isEmpty()) {
+                        return true; // Show all students if the search box is empty
+                    }
 
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    return student.getId().toLowerCase().contains(lowerCaseFilter); // Filter by student ID
+                });
+            });
 
-        // Set the loaded AnchorPane into the mainPane
-        AnchorPane.setTopAnchor(anchorPane, 0.0);
-        AnchorPane.setBottomAnchor(anchorPane, 0.0);
-        AnchorPane.setLeftAnchor(anchorPane, 0.0);
-        AnchorPane.setRightAnchor(anchorPane, 0.0);
-
-        mainPane.getChildren().setAll(anchorPane);
-
-    } catch (IOException e) {
-        e.printStackTrace();
+            studentTabel.setItems(filteredList);
+        }
     }
-}
+
+    private void loadCrudStudentViewWithStudentData(StudentDTO student) {
+        AnchorPane mainPane = dashboardController.getMainPane();
+        try {
+            // Load the FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/crudStudent.fxml"));
+            AnchorPane anchorPane = loader.load();
+
+            // Get the controller associated with the FXML
+            CrudStudentController controller = loader.getController();
+            controller.setInfoStudentDto(student);
+            controller.setDashboardController(this.dashboardController);
+            controller.lodeDatamode();
+
+
+            // Set the loaded AnchorPane into the mainPane
+            AnchorPane.setTopAnchor(anchorPane, 0.0);
+            AnchorPane.setBottomAnchor(anchorPane, 0.0);
+            AnchorPane.setLeftAnchor(anchorPane, 0.0);
+            AnchorPane.setRightAnchor(anchorPane, 0.0);
+
+            mainPane.getChildren().setAll(anchorPane);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initTabel() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));

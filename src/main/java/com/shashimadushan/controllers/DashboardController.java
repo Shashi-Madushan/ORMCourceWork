@@ -2,6 +2,9 @@ package com.shashimadushan.controllers;
 
 import com.jfoenix.controls.JFXButton;
 
+import com.shashimadushan.bo.BOFactory;
+import com.shashimadushan.bo.custom.UserBO;
+import com.shashimadushan.dto.UserDTO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -20,6 +23,7 @@ import static com.shashimadushan.utils.GlobelVars.userRole;
 
 @Data
 public class DashboardController {
+  UserBO userBO = (UserBO) BOFactory.getBO(BOFactory.BOType.USER);
 
     @FXML
     private JFXButton dashbordBtn;
@@ -47,7 +51,8 @@ public class DashboardController {
 
     public void initialize() {
         loadView("home");
-        if (userRole == "Admin") {
+
+        if (userRole.equals("Admin")) {
             usersBtn.setVisible(true);
         }else {
             usersBtn.setVisible(false);
