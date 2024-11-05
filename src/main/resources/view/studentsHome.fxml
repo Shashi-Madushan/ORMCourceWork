@@ -31,5 +31,15 @@
                </image>
             </ImageView>
          </graphic></JFXButton>
+      <JFXButton layoutX="34.0" layoutY="19.0" onAction="#allProgramsBtnOnAction" prefHeight="31.0" prefWidth="53.0" stylesheets="@../styles/buttonStyles.css" text="All p" />
+      <JFXButton layoutX="102.0" layoutY="20.0" onAction="#refreshBtnOnaction" prefHeight="31.0" prefWidth="45.0" stylesheets="@../styles/buttonStyles.css" text="">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assets/icons8-refresh-50.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
    </children>
 </AnchorPane>

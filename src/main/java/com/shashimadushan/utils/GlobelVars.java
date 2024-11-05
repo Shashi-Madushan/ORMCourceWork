@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public  class GlobelVars {
-    private static String from =null;
+    public static String userNameVar;
     public static String userRole;
 }

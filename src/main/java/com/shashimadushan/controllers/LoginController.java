@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static com.shashimadushan.utils.GlobelVars.userNameVar;
+
 public class LoginController {
     Stage stage;
     @FXML
@@ -29,6 +31,7 @@ public class LoginController {
     @FXML
     void loginBtnOnAction(ActionEvent event) {
         String usename = usernameTextField.getText();
+        userNameVar = usename;
         String pwd = pwdTextField.getText();
 
 

@@ -53,6 +53,9 @@ public class StudentsHomeController {
 
     StudentBO studentBO = (StudentBO) BOFactory.getBO(BOFactory.BOType.STUDENT);
     String css = getClass().getResource("/styles/buttonStyles.css").toExternalForm();
+    List<StudentDTO> students = studentBO.getAllStudents();
+    List<StudentDTO> allProgramStudents=   studentBO.getStudentsEnrolledInAllPrograms();
+//    List<StudentDTO> students = studentBO.getAllStudents();
 
     public void initialize() {
         initTabel();
@@ -81,7 +84,7 @@ public class StudentsHomeController {
     }
 
     private void setupStudentSearchFilter() {
-        List<StudentDTO> students = studentBO.getAllStudents();
+
         ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(students);
 
         if (studentList != null) {
@@ -138,7 +141,7 @@ public class StudentsHomeController {
     }
 
     private void loadDataToTabel() {
-        List<StudentDTO> students = studentBO.getAllStudents();
+
         ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(students);
         studentTabel.setItems(studentList);
     }
@@ -154,19 +157,14 @@ public class StudentsHomeController {
             @Override
             public TableCell<StudentDTO, Void> call(final TableColumn<StudentDTO, Void> param) {
                 final TableCell<StudentDTO, Void> cell = new TableCell<>() {
-                    JFXButton updateButton = new JFXButton("Update");
+
                     JFXButton deleteButton = new JFXButton("Delete");
 
                     {
-                        updateButton.getStylesheets().add(css);
-                        deleteButton.getStylesheets().add(css);
-                        updateButton.getStyleClass().add("update-button");
-                        deleteButton.getStyleClass().add("delete-button");
 
-                        updateButton.setOnAction((ActionEvent event) -> {
-                            StudentDTO student = getTableView().getItems().get(getIndex());
-                            //showUpdatePopup(student);
-                        });
+                        deleteButton.getStylesheets().add(css);
+
+                        deleteButton.getStyleClass().add("delete-button");
 
                         deleteButton.setOnAction((ActionEvent event) -> {
                             StudentDTO student = getTableView().getItems().get(getIndex());
@@ -194,7 +192,7 @@ public class StudentsHomeController {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            HBox buttons = new HBox(updateButton, deleteButton);
+                            HBox buttons = new HBox( deleteButton);
                             setGraphic(buttons);
                         }
                     }
@@ -207,4 +205,15 @@ public class StudentsHomeController {
         studentTabel.getColumns().add(colAction);
     }
 
+    public void allProgramsBtnOnAction(ActionEvent actionEvent) {
+
+        ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(allProgramStudents);
+        studentTabel.setItems(studentList);
+
+    }
+
+    public void refreshBtnOnaction(ActionEvent actionEvent) {
+        loadDataToTabel();
+
+    }
 }

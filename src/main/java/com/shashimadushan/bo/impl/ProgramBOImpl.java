@@ -43,4 +43,8 @@ public class ProgramBOImpl implements ProgramBO {
     public List<ProgramDTO> searchPrograms(String query) {
         return List.of();
     }
+
+    public Long getProgramCount(){
+      return    programDAO.getProgramCount();
+    }
 }

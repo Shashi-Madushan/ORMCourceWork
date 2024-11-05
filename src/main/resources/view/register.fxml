@@ -38,7 +38,7 @@
                   <Hyperlink layoutX="234.0" layoutY="308.0" onAction="#loginOnClick" text="Log in" />
                </children>
             </AnchorPane>
-            <Pane maxWidth="600.0" minHeight="429.0" minWidth="264.0" prefHeight="429.0" prefWidth="264.0" style="-fx-background-color: #5582ff; -fx-border-radius: 12; -fx-background-radius: 12;" HBox.hgrow="ALWAYS" />
+            <Pane maxWidth="600.0" minHeight="429.0" minWidth="264.0" prefHeight="429.0" prefWidth="264.0" style="-fx-background-color: rgba(97,137,248,0.6); -fx-border-radius: 12; -fx-background-radius: 12;" HBox.hgrow="ALWAYS" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

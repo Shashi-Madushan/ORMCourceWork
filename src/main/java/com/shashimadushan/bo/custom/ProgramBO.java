@@ -15,4 +15,6 @@ public interface ProgramBO extends SuperBO {
     public void deleteProgram(ProgramDTO programDTO);
 
     public List<ProgramDTO> searchPrograms(String query);
-}
+    public Long getProgramCount();
+
+    }

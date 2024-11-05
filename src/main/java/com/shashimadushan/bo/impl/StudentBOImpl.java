@@ -45,4 +45,25 @@ public class StudentBOImpl implements StudentBO {
     public List<StudentDTO> searchStudents(String query) {
         return List.of();
     }
+
+    @Override
+    public List<StudentDTO> getStudentsEnrolledInProgram(String programId) {
+      List<Student> enrolledstudentList =  studentDAO.getStudentsEnrolledInProgram(programId);
+      List<StudentDTO> studentDTOS = new ArrayList<>();
+      for (Student student : enrolledstudentList) {
+          studentDTOS.add(new StudentDTO(student.getId(),student.getFirstName(),student.getLastName(),student.getAddress(),student.getEmail(),student.getPhone(),student.getEnrollments()));
+      }
+      return studentDTOS;
+    }
+    public int getStudentCount(){
+     return    studentDAO.getStudentCount();
+    }
+    public List<StudentDTO> getStudentsEnrolledInAllPrograms(){
+        List<Student> enrolledstudentList =  studentDAO.getStudentsEnrolledInAllPrograms();
+        List<StudentDTO> studentDTOS = new ArrayList<>();
+        for (Student student : enrolledstudentList) {
+            studentDTOS.add(new StudentDTO(student.getId(),student.getFirstName(),student.getLastName(),student.getAddress(),student.getEmail(),student.getPhone(),student.getEnrollments()));
+        }
+        return studentDTOS;
+    }
 }

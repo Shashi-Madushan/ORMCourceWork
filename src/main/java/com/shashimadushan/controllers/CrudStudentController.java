@@ -2,11 +2,8 @@ package com.shashimadushan.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.shashimadushan.bo.BOFactory;
-import com.shashimadushan.bo.custom.EnrolmentBO;
 import com.shashimadushan.bo.custom.ProgramBO;
 import com.shashimadushan.bo.custom.StudentBO;
-import com.shashimadushan.config.FactoryConfiguration;
-import com.shashimadushan.dto.EnrolmetDTO;
 import com.shashimadushan.dto.ProgramDTO;
 import com.shashimadushan.dto.StudentDTO;
 import com.shashimadushan.entitys.Enrolment;
@@ -66,7 +63,7 @@ public class CrudStudentController {
 
 
     StudentBO studentBO = (StudentBO) BOFactory.getBO(BOFactory.BOType.STUDENT);
-    EnrolmentBO enrolmentBO = (EnrolmentBO) BOFactory.getBO(BOFactory.BOType.ENROLMENT);
+    //EnrolmentBO enrolmentBO = (EnrolmentBO) BOFactory.getBO(BOFactory.BOType.ENROLMENT);
 
     public void initialize() {
         loadPrograms();
@@ -335,4 +332,3 @@ void updateBtnOnAction(ActionEvent actionEvent) {
 
 
 }
-

@@ -58,7 +58,7 @@ public class StudenDAOImpl implements StudentDAO {
     }
 
     @Override
-    public int getStudentCount(){
+    public int getStudentCount() {
         int count = 0;
 
         Session session = FactoryConfiguration.getInstance().getSession();
@@ -74,9 +74,49 @@ public class StudenDAOImpl implements StudentDAO {
 
         return count;
     }
+
+
     @Override
-    public List<Student> searchStudents(String query) {
-        return List.of();
+    public List<Student> getStudentsEnrolledInAllPrograms() {
+        List<Student> students;
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        String hql = "SELECT s " +
+                "FROM Student s " +
+                "JOIN s.enrollments e " +
+                "GROUP BY s.id " +
+                "HAVING COUNT(DISTINCT e.program.id) = " +
+                " (SELECT COUNT(p.id) FROM Program p)";
+
+        Query<Student> query = session.createQuery(hql, Student.class);
+        students = query.getResultList();
+
+        transaction.commit();
+        session.close();
+
+        return students;
     }
 
+    public List<Student> getStudentsEnrolledInProgram(String programId) {
+        Transaction transaction = null;
+        List<Student> students = null;
+
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+
+            // HQL query to fetch students enrolled in a specific program
+            String hql = "SELECT s FROM Student s JOIN FETCH s.enrollments e JOIN FETCH e.program p WHERE p.id = :programId";
+            Query<Student> query = session.createQuery(hql, Student.class);
+            query.setParameter("programId", programId);
+            students = query.getResultList();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
+
+        return students;
+    }
 }

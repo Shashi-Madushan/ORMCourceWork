@@ -23,9 +23,8 @@ public class Program {
     private int duration;
     private double fee;
 
-    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Enrolment> enrollments;
 
-    // Getters and setters
 
 }

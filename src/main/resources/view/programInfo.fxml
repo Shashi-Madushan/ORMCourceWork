@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="456.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.shashimadushan.controllers.ProgramsInfoController">
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="436.0" prefWidth="365.0" spacing="15.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="32.0" prefWidth="303.0">
+                     <children>
+                        <JFXButton onAction="#backBtnOnAction" text=" " HBox.hgrow="ALWAYS">
+                           <graphic>
+                              <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../assets/icons8-back-button-50.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <Label contentDisplay="CENTER" prefHeight="26.0" prefWidth="181.0" text="Enrolled Students" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Cambria" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="enrolledStudents" prefHeight="404.0" prefWidth="410.0" stylesheets="@../styles/tabelStyles.css" VBox.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn fx:id="colId" prefWidth="112.0" text="ID" />
+                      <TableColumn fx:id="colName" prefWidth="221.0" text="NAME" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </VBox>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <children>
+                  <Label layoutX="23.0" layoutY="53.0" text="Name" AnchorPane.leftAnchor="23.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="23.0" layoutY="203.0" text="Enrolled Student Count" AnchorPane.leftAnchor="23.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="stduntCount" layoutX="181.0" layoutY="177.0" text="5" AnchorPane.leftAnchor="181.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="23.0" layoutY="152.0" text="Fee" AnchorPane.leftAnchor="23.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="feeLbl" layoutX="91.0" layoutY="152.0" text="100000.00" AnchorPane.leftAnchor="91.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="23.0" layoutY="99.0" text="ID" AnchorPane.leftAnchor="23.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="IDLbl" layoutX="93.0" layoutY="98.0" text="C001" AnchorPane.leftAnchor="93.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="programNameLbl" layoutX="90.0" layoutY="53.0" text="NAme" AnchorPane.leftAnchor="90.0">
+                     <font>
+                        <Font name="Cambria" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>

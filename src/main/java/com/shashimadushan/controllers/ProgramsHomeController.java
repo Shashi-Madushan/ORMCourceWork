@@ -4,15 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.shashimadushan.bo.BOFactory;
 import com.shashimadushan.bo.custom.ProgramBO;
 import com.shashimadushan.dto.ProgramDTO;
-import com.shashimadushan.dto.StudentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -77,7 +76,29 @@ public class ProgramsHomeController {
     }
 
     private void loadProgramInfo(ProgramDTO selectedProgram) {
+        AnchorPane mainPane = dashboardController.getMainPane();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/programInfo.fxml"));
+            AnchorPane anchorPane = loader.load();
 
+            // Get the controller associated with the FXML
+            ProgramsInfoController controller = loader.getController();
+
+            controller.setDashboardController(this.dashboardController);
+            controller.setProgramDTO(selectedProgram);
+            controller.loadData();
+
+
+            // Set the loaded AnchorPane into the mainPane
+            AnchorPane.setTopAnchor(anchorPane, 0.0);
+            AnchorPane.setBottomAnchor(anchorPane, 0.0);
+            AnchorPane.setLeftAnchor(anchorPane, 0.0);
+            AnchorPane.setRightAnchor(anchorPane, 0.0);
+
+            mainPane.getChildren().setAll(anchorPane);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void setupProgramSearchFilter() {

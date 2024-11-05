@@ -10,14 +10,14 @@
 }
 .button:hover {
     -fx-background-color: #5582ff; /* Optional hover color */
-    -fx-text-fill: #000000;
+    -fx-text-fill: #ffffff;
 }
 
 
 
 .button.selected {
     -fx-background-color: #6189f8;
-
+    -fx-text-fill: #ffffff;
 }
 
 
@@ -36,8 +36,8 @@
 
 /* buttonStyles.css */
 .update-button {
-    -fx-background-color: #20c720; /* Green */
-    -fx-text-fill: white;
+    -fx-background-color: #b4ffb7; /* Green */
+    -fx-text-fill: #000000;
     -fx-padding: 5 10 5 10;
     -fx-background-radius: 5;
 }
@@ -50,12 +50,14 @@
 }
 
 .update-button:hover {
-    -fx-background-color: #7bff7f;
-    -fx-text-fill: black;
+    -fx-background-color: #20c720;
+    -fx-text-fill: #ffffff;
 }
 
 .delete-button:hover {
     -fx-background-color: #f63a2c;
+    -fx-text-fill: #ffffff;
+
 }
 
 

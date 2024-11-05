@@ -95,6 +95,7 @@ public class DashboardController {
     @FXML
     void reportsBtnOnAction(ActionEvent event) {
         setupButtonClick(repotsBtn);
+
     }
 
     @FXML

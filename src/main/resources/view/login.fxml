@@ -15,7 +15,7 @@
    <children>
       <HBox prefHeight="429.0" prefWidth="670.0" spacing="10.0" style="-fx-background-color: #F5F5F5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane maxWidth="600.0" minHeight="429.0" minWidth="264.0" prefHeight="429.0" prefWidth="264.0" style="-fx-background-color: #5582FFFF; -fx-border-radius: 12; -fx-background-radius: 12;" HBox.hgrow="ALWAYS" />
+            <Pane maxWidth="600.0" minHeight="429.0" minWidth="264.0" prefHeight="429.0" prefWidth="264.0" style="-fx-background-color: rgba(97,137,248,0.6); -fx-border-radius: 12; -fx-background-radius: 12;" HBox.hgrow="ALWAYS" />
             <AnchorPane prefHeight="429.0" prefWidth="392.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 12; -fx-border-radius: 12;" HBox.hgrow="ALWAYS">
                <children>
                   <JFXButton buttonType="RAISED" layoutX="97.0" layoutY="265.0" maxWidth="300.0" onAction="#loginBtnOnAction" prefHeight="27.0" prefWidth="187.0" style="-fx-background-color: #5582FFFF; -fx-background-radius: 15; -fx-border-radius: 15;" text="Log in" textFill="WHITE" AnchorPane.bottomAnchor="137.0" AnchorPane.leftAnchor="97.0" AnchorPane.rightAnchor="92.0">
