@@ -22,7 +22,7 @@ public class Student {
     private String phone;
 
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Enrolment> enrollments;
 }
 

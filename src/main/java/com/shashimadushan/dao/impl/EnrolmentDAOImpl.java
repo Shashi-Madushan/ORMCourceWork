@@ -19,7 +19,7 @@ public class EnrolmentDAOImpl implements EnrolmetDAO {
         try {
             transaction = session.beginTransaction();
             for (Enrolment enrolment : enrolments) {
-                session.save(enrolment);
+                session.persist(enrolment);
             }
             transaction.commit();
         } catch (Exception e) {

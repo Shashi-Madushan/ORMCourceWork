@@ -54,7 +54,7 @@ public class StudentsHomeController {
     StudentBO studentBO = (StudentBO) BOFactory.getBO(BOFactory.BOType.STUDENT);
     String css = getClass().getResource("/styles/buttonStyles.css").toExternalForm();
     List<StudentDTO> students = studentBO.getAllStudents();
-   // List<StudentDTO> allProgramStudents=   studentBO.getStudentsEnrolledInAllPrograms();
+
 //    List<StudentDTO> students = studentBO.getAllStudents();
 
     public void initialize() {
@@ -206,9 +206,9 @@ public class StudentsHomeController {
     }
 
     public void allProgramsBtnOnAction(ActionEvent actionEvent) {
-
-//        ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(allProgramStudents);
-//        studentTabel.setItems(studentList);
+        List<StudentDTO> allProgramStudents=   studentBO.getStudentsEnrolledInAllPrograms();
+        ObservableList<StudentDTO> studentList = FXCollections.observableArrayList(allProgramStudents);
+        studentTabel.setItems(studentList);
 
     }
 

@@ -81,41 +81,48 @@ public class CrudStudentController {
         addBtn.setVisible(false);
     }
 
-    private void populateStudentInfo() {
-        if (infoStudentDto != null) {
-            isPopulating = true;
-            studentIdTxtField.setText(infoStudentDto.getId());
-            fnameTxtField.setText(infoStudentDto.getFirstName());
-            lnameTxtField.setText(infoStudentDto.getLastName());
-            addressTxtField.setText(infoStudentDto.getAddress());
-            emailTxtField.setText(infoStudentDto.getEmail());
-            tpTxtField.setText(infoStudentDto.getPhone());
+ private void populateStudentInfo() {
+    if (infoStudentDto != null) {
+        isPopulating = true;
+        studentIdTxtField.setText(infoStudentDto.getId());
+        fnameTxtField.setText(infoStudentDto.getFirstName());
+        lnameTxtField.setText(infoStudentDto.getLastName());
+        addressTxtField.setText(infoStudentDto.getAddress());
+        emailTxtField.setText(infoStudentDto.getEmail());
+        tpTxtField.setText(infoStudentDto.getPhone());
 
-            List<EnrolmentDTO> enrollments = infoStudentDto.getEnrollments();
-            if (enrollments != null) {
-                for (EnrolmentDTO enrolment : enrollments) {
-                    ProgramDTO program = enrolment.getProgram();
-                    if (program != null) {
-                        for (Node node : programsVbox.getChildren()) {
-                            if (node instanceof HBox hbox) {
-                                for (Node childNode : hbox.getChildren()) {
-                                    if (childNode instanceof CheckBox checkBox && checkBox.getId().equals(program.getProgramId())) {
-                                        checkBox.setSelected(true);
-                                        programPayments.put(program.getProgramId(), enrolment.getPayment());
-                                    }
-                                    if (childNode instanceof Label label && "paymentLbl".equals(label.getId())) {
-                                        label.setText("Payment: " + enrolment.getPayment());
-                                    }
+        List<EnrolmentDTO> enrollments = infoStudentDto.getEnrollments();
+        if (enrollments != null) {
+            for (EnrolmentDTO enrolment : enrollments) {
+                ProgramDTO program = enrolment.getProgram();
+                if (program != null) {
+                    for (Node node : programsVbox.getChildren()) {
+                        if (node instanceof HBox hbox) {
+                            CheckBox checkBox = null;
+                            Label paymentLabel = null;
+
+                            for (Node childNode : hbox.getChildren()) {
+                                if (childNode instanceof CheckBox cb && cb.getId().equals(program.getProgramId())) {
+                                    checkBox = cb;
                                 }
+                                if (childNode instanceof Label label) {
+                                    paymentLabel = label;
+                                }
+                            }
+
+                            if (checkBox != null && paymentLabel != null) {
+                                checkBox.setSelected(true);
+                                programPayments.put(program.getProgramId(), enrolment.getPayment());
+                                paymentLabel.setText("Payment: " + enrolment.getPayment());
                             }
                         }
                     }
                 }
             }
-            isPopulating = false; // End programmatic update
         }
+        isPopulating = false; // End programmatic update
     }
-
+}
     private void loadPrograms() {
         List<ProgramDTO> programDTOS = programBO.getAllPrograms();
         programsVbox.getChildren().clear();
@@ -125,7 +132,7 @@ public class CrudStudentController {
             hbox.setSpacing(10);
             CheckBox checkBox = new CheckBox(programDTO.getName());
             Label paymentLabel = new Label("Payment: 0.0"); // Default payment
-            paymentLabel.setId("paymentLbl");
+
 
             checkBox.setId(programDTO.getProgramId());
             checkBox.setUserData(programDTO);

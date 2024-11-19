@@ -16,7 +16,7 @@ public class StudenDAOImpl implements StudentDAO {
         Transaction transaction = null;
         try (Session session = FactoryConfiguration.getInstance().getSession()) {
             transaction = session.beginTransaction();
-            session.save(student);
+            session.persist(student);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -89,21 +89,17 @@ public class StudenDAOImpl implements StudentDAO {
         try (Session session = FactoryConfiguration.getInstance().getSession()) {
             transaction = session.beginTransaction();
 
-            String hql = """
-            SELECT s 
-            FROM Student s
-            WHERE (
-                SELECT COUNT(DISTINCT e.program.id) 
-                FROM Enrollment e
-                WHERE e.student.id = s.id
-            ) = (
-                SELECT COUNT(p.id) 
-                FROM Program p
-            )
-        """;
+            // HQL to find students enrolled in all programs
+            String hql = "SELECT s " +
+                    "FROM Student s " +
+                    "JOIN s.enrollments e " +
+                    "GROUP BY s.id " +
+                    "HAVING COUNT(DISTINCT e.program.id) = " +
+                    " (SELECT COUNT(p.id) FROM Program p)";
 
             Query<Student> query = session.createQuery(hql, Student.class);
             students = query.getResultList();
+
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
@@ -111,7 +107,6 @@ public class StudenDAOImpl implements StudentDAO {
         }
         return students;
     }
-
 
     @Override
     public List<Student> getStudentsEnrolledInProgram(String programId) {
