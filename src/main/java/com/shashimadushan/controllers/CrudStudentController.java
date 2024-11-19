@@ -2,8 +2,10 @@ package com.shashimadushan.controllers;
 
 import com.jfoenix.controls.JFXButton;
 import com.shashimadushan.bo.BOFactory;
+import com.shashimadushan.bo.custom.EnrollmentsBO;
 import com.shashimadushan.bo.custom.ProgramBO;
 import com.shashimadushan.bo.custom.StudentBO;
+import com.shashimadushan.dto.EnrolmentDTO;
 import com.shashimadushan.dto.ProgramDTO;
 import com.shashimadushan.dto.StudentDTO;
 import com.shashimadushan.entitys.Enrolment;
@@ -12,19 +14,21 @@ import com.shashimadushan.entitys.Student;
 import com.shashimadushan.utils.Regex;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Data;
 import javafx.scene.control.CheckBox;
 
 
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import javafx.scene.control.TextInputDialog;
 
 @Data
 public class CrudStudentController {
@@ -41,7 +45,6 @@ public class CrudStudentController {
 
     @FXML
     private TextField addressTxtField;
-
 
     @FXML
     private TextField emailTxtField;
@@ -61,18 +64,18 @@ public class CrudStudentController {
     @FXML
     private TextField tpTxtField;
 
-
+    EnrollmentsBO enrollmentsBO = (EnrollmentsBO) BOFactory.getBO(BOFactory.BOType.ENROLLMENT);
     StudentBO studentBO = (StudentBO) BOFactory.getBO(BOFactory.BOType.STUDENT);
-    //EnrolmentBO enrolmentBO = (EnrolmentBO) BOFactory.getBO(BOFactory.BOType.ENROLMENT);
+    private final Map<String, Double> programPayments = new HashMap<>(); // Stores payment for each program
+    private boolean isPopulating = false; // Flag to track if data is being loaded programmatically
 
     public void initialize() {
         loadPrograms();
         updatebtn.setVisible(false);
-
     }
 
-    public void lodeDatamode(){
-        System.out.println("maual");
+    public void lodeDatamode() {
+        System.out.println("manual");
         populateStudentInfo();
         updatebtn.setVisible(true);
         addBtn.setVisible(false);
@@ -80,6 +83,7 @@ public class CrudStudentController {
 
     private void populateStudentInfo() {
         if (infoStudentDto != null) {
+            isPopulating = true;
             studentIdTxtField.setText(infoStudentDto.getId());
             fnameTxtField.setText(infoStudentDto.getFirstName());
             lnameTxtField.setText(infoStudentDto.getLastName());
@@ -87,66 +91,103 @@ public class CrudStudentController {
             emailTxtField.setText(infoStudentDto.getEmail());
             tpTxtField.setText(infoStudentDto.getPhone());
 
-            // Mark the checkboxes for the enrolled programs
-            List<Enrolment> enrollments = infoStudentDto.getEnrollments();
+            List<EnrolmentDTO> enrollments = infoStudentDto.getEnrollments();
             if (enrollments != null) {
-                for (Enrolment enrolment : enrollments) {
-                    Program program = enrolment.getProgram();
+                for (EnrolmentDTO enrolment : enrollments) {
+                    ProgramDTO program = enrolment.getProgram();
                     if (program != null) {
-                        programsVbox.getChildren().stream()
-                                .filter(node -> node instanceof CheckBox)
-                                .map(node -> (CheckBox) node)
-                                .filter(checkBox -> checkBox.getId().equals(program.getProgramId()))
-                                .forEach(checkBox -> checkBox.setSelected(true));
+                        for (Node node : programsVbox.getChildren()) {
+                            if (node instanceof HBox hbox) {
+                                for (Node childNode : hbox.getChildren()) {
+                                    if (childNode instanceof CheckBox checkBox && checkBox.getId().equals(program.getProgramId())) {
+                                        checkBox.setSelected(true);
+                                        programPayments.put(program.getProgramId(), enrolment.getPayment());
+                                    }
+                                    if (childNode instanceof Label label && "paymentLbl".equals(label.getId())) {
+                                        label.setText("Payment: " + enrolment.getPayment());
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
+            isPopulating = false; // End programmatic update
         }
     }
+
+    private void loadPrograms() {
+        List<ProgramDTO> programDTOS = programBO.getAllPrograms();
+        programsVbox.getChildren().clear();
+
+        for (ProgramDTO programDTO : programDTOS) {
+            HBox hbox = new HBox();
+            hbox.setSpacing(10);
+            CheckBox checkBox = new CheckBox(programDTO.getName());
+            Label paymentLabel = new Label("Payment: 0.0"); // Default payment
+            paymentLabel.setId("paymentLbl");
+
+            checkBox.setId(programDTO.getProgramId());
+            checkBox.setUserData(programDTO);
+
+            // Event listener to handle checkbox selection
+            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue && !isPopulating) {
+                    double payment = popupForPayment(programDTO.getName());
+                    programPayments.put(programDTO.getProgramId(), payment);
+                    paymentLabel.setText("Payment: " + payment);
+                } else {
+                    programPayments.remove(programDTO.getProgramId());
+                    paymentLabel.setText("Payment: 0.0");
+                }
+            });
+
+            hbox.getChildren().addAll(checkBox, paymentLabel);
+            programsVbox.getChildren().add(hbox);
+        }
+    }
+
+    private double popupForPayment(String programName) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Enter Payment");
+        dialog.setHeaderText("Enter payment for the program: " + programName);
+        dialog.setContentText("Payment:");
+
+        Optional<String> result = dialog.showAndWait();
+        try {
+            return result.map(Double::parseDouble).orElse(0.0);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter a valid number.");
+            alert.showAndWait();
+            return 0.0;
+        }
+    }
+
     @FXML
     void addBtnOnAction(ActionEvent event) {
-        // Validate input fields
-        boolean isValid = true;
+        if (!validateFields()) return;
 
-        if (!Regex.setTextColor(Regex.FieldType.NAME, fnameTxtField)) {
-            isValid = false;
-        }
-        if (!Regex.setTextColor(Regex.FieldType.NAME, lnameTxtField)) {
-            isValid = false;
-        }
-        if (!Regex.setTextColor(Regex.FieldType.ADDRESS, addressTxtField)) {
-            isValid = false;
-        }
-        if (!Regex.setTextColor(Regex.FieldType.EMAIL, emailTxtField)) {
-            isValid = false;
-        }
-        if (!Regex.setTextColor(Regex.FieldType.TEL, tpTxtField)) {
-            isValid = false;
-        }
-        if (!Regex.setTextColor(Regex.FieldType.STUDENTID, studentIdTxtField)) {
-            isValid = false;
-        }
-
-        if (!isValid) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Validation Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Please correct the highlighted fields.");
-            alert.showAndWait();
-            return;
-        }
-
-        // Gather selected programs
         List<ProgramDTO> selectedPrograms = programsVbox.getChildren().stream()
-                .filter(node -> node instanceof CheckBox)
-                .map(node -> (CheckBox) node)
-                .filter(CheckBox::isSelected)
-                .map(checkBox -> (ProgramDTO) checkBox.getUserData())
+                .filter(node -> node instanceof HBox hbox && hbox.getChildren().get(0) instanceof CheckBox checkBox && checkBox.isSelected())
+                .map(hbox -> (ProgramDTO) ((CheckBox) ((HBox) hbox).getChildren().get(0)).getUserData())
                 .toList();
 
+        StudentDTO student = createStudentDTO();
+        List<EnrolmentDTO> enrolmentDTOList = createEnrollmentDTOs(student, selectedPrograms);
+
+        student.setEnrollments(enrolmentDTOList);
+        studentBO.addStudent(student);
+        enrollmentsBO.saveEnrolments(enrolmentDTOList);
 
 
-        // Create a new student object (assuming you have a StudentDTO class)
+        showAlert(Alert.AlertType.INFORMATION, "Success", "Student added successfully!");
+        clearFields();
+    }
+
+    private StudentDTO createStudentDTO() {
         StudentDTO student = new StudentDTO();
         student.setId(studentIdTxtField.getText());
         student.setFirstName(fnameTxtField.getText());
@@ -154,110 +195,42 @@ public class CrudStudentController {
         student.setAddress(addressTxtField.getText());
         student.setEmail(emailTxtField.getText());
         student.setPhone(tpTxtField.getText());
-
-        List<Enrolment> enrolmentDTOList =createEnrollmentDTOs(student,selectedPrograms);
-
-        student.setEnrollments(enrolmentDTOList);
-
-        // Add the student using the appropriate BO method (assuming you have a StudentBO)
-
-        studentBO.addStudent(student);
-
-        // Show success message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText(null);
-        alert.setContentText("Student added successfully!");
-        alert.showAndWait();
-
-        // Clear fields after adding
-        clearFields();
+        return student;
     }
 
-  @FXML
-void updateBtnOnAction(ActionEvent actionEvent) {
-    // Validate input fields
-    boolean isValid = true;
+    private boolean validateFields() {
+        boolean isValid = true;
+        if (!Regex.setTextColor(Regex.FieldType.NAME, fnameTxtField)) isValid = false;
+        if (!Regex.setTextColor(Regex.FieldType.NAME, lnameTxtField)) isValid = false;
+        if (!Regex.setTextColor(Regex.FieldType.ADDRESS, addressTxtField)) isValid = false;
+        if (!Regex.setTextColor(Regex.FieldType.EMAIL, emailTxtField)) isValid = false;
+        if (!Regex.setTextColor(Regex.FieldType.TEL, tpTxtField)) isValid = false;
+        if (!Regex.setTextColor(Regex.FieldType.STUDENTID, studentIdTxtField)) isValid = false;
 
-    if (!Regex.setTextColor(Regex.FieldType.NAME, fnameTxtField)) {
-        isValid = false;
-    }
-    if (!Regex.setTextColor(Regex.FieldType.NAME, lnameTxtField)) {
-        isValid = false;
-    }
-    if (!Regex.setTextColor(Regex.FieldType.ADDRESS, addressTxtField)) {
-        isValid = false;
-    }
-    if (!Regex.setTextColor(Regex.FieldType.EMAIL, emailTxtField)) {
-        isValid = false;
-    }
-    if (!Regex.setTextColor(Regex.FieldType.TEL, tpTxtField)) {
-        isValid = false;
-    }
-    if (!Regex.setTextColor(Regex.FieldType.STUDENTID, studentIdTxtField)) {
-        isValid = false;
-    }
-
-    if (!isValid) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Validation Error");
-        alert.setHeaderText(null);
-        alert.setContentText("Please correct the highlighted fields.");
-        alert.showAndWait();
-        return;
-    }
-
-    // Gather selected programs
-    List<ProgramDTO> selectedPrograms = programsVbox.getChildren().stream()
-            .filter(node -> node instanceof CheckBox)
-            .map(node -> (CheckBox) node)
-            .filter(CheckBox::isSelected)
-            .map(checkBox -> (ProgramDTO) checkBox.getUserData())
-            .toList();
-
-    // Update the student object
-    StudentDTO student = new StudentDTO();
-    student.setId(studentIdTxtField.getText());
-    student.setFirstName(fnameTxtField.getText());
-    student.setLastName(lnameTxtField.getText());
-    student.setAddress(addressTxtField.getText());
-    student.setEmail(emailTxtField.getText());
-    student.setPhone(tpTxtField.getText());
-
-    List<Enrolment> enrolmentDTOList = createEnrollmentDTOs(student, selectedPrograms);
-    student.setEnrollments(enrolmentDTOList);
-
-    // Update the student using the appropriate BO method
-    studentBO.updateStudent(student);
-
-    // Show success message
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Success");
-    alert.setHeaderText(null);
-    alert.setContentText("Student updated successfully!");
-    alert.showAndWait();
-
-    // Clear fields after updating
-    clearFields();
-    dashboardController.loadView("students");
-}
-
-    private List<Enrolment> createEnrollmentDTOs(StudentDTO student, List<ProgramDTO> selectedPrograms) {
-        List<Enrolment> enrolmentDTOList = new ArrayList<>();
-
-        for (ProgramDTO program : selectedPrograms) {
-            Enrolment enrolmentDTO = new Enrolment();
-            enrolmentDTO.setId(0); // Assuming ID is auto-generated
-            enrolmentDTO.setRegistrationDate(LocalDate.now()); // Set current date as registration date
-            enrolmentDTO.setPayment(0.0); // Set default payment, modify as needed
-            enrolmentDTO.setStudent(new Student(student.getId(), student.getFirstName(), student.getLastName(), student.getAddress(),  student.getEmail(), student.getPhone(),student.getEnrollments()));
-            enrolmentDTO.setProgram(new Program(program.getProgramId(), program.getName(), program.getDurationMonths(), program.getFee(), program.getEnrollments()));
-            enrolmentDTOList.add(enrolmentDTO);
+        if (!isValid) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Please correct the highlighted fields.");
         }
-
-        return enrolmentDTOList;
+        return isValid;
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private List<EnrolmentDTO> createEnrollmentDTOs(StudentDTO student, List<ProgramDTO> selectedPrograms) {
+        return selectedPrograms.stream().map(program -> {
+            EnrolmentDTO enrolmentDTO = new EnrolmentDTO();
+            enrolmentDTO.setRegistrationDate(LocalDate.now());
+            enrolmentDTO.setPayment(programPayments.getOrDefault(program.getProgramId(), 0.0));
+            enrolmentDTO.setStudent(new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getAddress(), student.getEmail(), student.getPhone(), student.getEnrollments()));
+            enrolmentDTO.setProgram(new ProgramDTO(program.getProgramId(), program.getName(), program.getDurationMonths(), program.getFee(), program.getEnrollments()));
+            return enrolmentDTO;
+        }).toList();
+    }
 
     private void clearFields() {
         studentIdTxtField.clear();
@@ -267,37 +240,14 @@ void updateBtnOnAction(ActionEvent actionEvent) {
         emailTxtField.clear();
         tpTxtField.clear();
         programsVbox.getChildren().stream()
-                .filter(node -> node instanceof CheckBox)
-                .forEach(node -> ((CheckBox) node).setSelected(false));
+                .filter(node -> node instanceof HBox hbox && hbox.getChildren().get(0) instanceof CheckBox checkBox)
+                .forEach(node -> {
+                    CheckBox checkBox = (CheckBox) ((HBox) node).getChildren().get(0);
+                    checkBox.setSelected(false);
+                    ((Label) ((HBox) node).getChildren().get(1)).setText("Payment: 0.0");
+                });
+        programPayments.clear();
     }
-
-    @FXML
-    void backBtnOnAction(ActionEvent event) {
-        dashboardController.loadView("students");
-    }
-
-
-    private void loadPrograms() {
-
-        List<ProgramDTO> programDTOS = programBO.getAllPrograms();
-
-
-        programsVbox.getChildren().clear();
-
-
-        for (ProgramDTO programDTO : programDTOS) {
-
-            CheckBox checkBox = new CheckBox(programDTO.getName());
-
-
-            checkBox.setId(programDTO.getProgramId());
-            checkBox.setUserData(programDTO);
-
-
-            programsVbox.getChildren().add(checkBox);
-        }
-    }
-
 
     @FXML
     void addresValidation(KeyEvent event) {
@@ -330,5 +280,98 @@ void updateBtnOnAction(ActionEvent actionEvent) {
         Regex.setTextColor(Regex.FieldType.STUDENTID, studentIdTxtField);
     }
 
+    @FXML
+    public void updateBtnOnAction(ActionEvent actionEvent) {
+        // Validate input fields
+        boolean isValid = true;
+
+        if (!Regex.setTextColor(Regex.FieldType.NAME, fnameTxtField)) {
+            isValid = false;
+        }
+        if (!Regex.setTextColor(Regex.FieldType.NAME, lnameTxtField)) {
+            isValid = false;
+        }
+        if (!Regex.setTextColor(Regex.FieldType.ADDRESS, addressTxtField)) {
+            isValid = false;
+        }
+        if (!Regex.setTextColor(Regex.FieldType.EMAIL, emailTxtField)) {
+            isValid = false;
+        }
+        if (!Regex.setTextColor(Regex.FieldType.TEL, tpTxtField)) {
+            isValid = false;
+        }
+        if (!Regex.setTextColor(Regex.FieldType.STUDENTID, studentIdTxtField)) {
+            isValid = false;
+        }
+
+        if (!isValid) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Validation Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please correct the highlighted fields.");
+            alert.showAndWait();
+            return;
+        }
+        StudentDTO student = new StudentDTO();
+        student.setId(studentIdTxtField.getText());
+        student.setFirstName(fnameTxtField.getText());
+        student.setLastName(lnameTxtField.getText());
+        student.setAddress(addressTxtField.getText());
+        student.setEmail(emailTxtField.getText());
+        student.setPhone(tpTxtField.getText());
+
+
+        // Gather selected programs and their payment details
+        List<EnrolmentDTO> enrolmentDTOList = new ArrayList<>();
+        for (Node node : programsVbox.getChildren()) {
+            if (node instanceof HBox hbox) {
+                CheckBox checkBox = (CheckBox) hbox.getChildren().get(0);
+                Label paymentLabel = (Label) hbox.getChildren().get(1);
+
+                if (checkBox.isSelected()) {
+                    ProgramDTO program = (ProgramDTO) checkBox.getUserData();
+                    EnrolmentDTO enrolment = new EnrolmentDTO();
+                    enrolment.setProgram(new ProgramDTO(program.getProgramId(), program.getName(), program.getDurationMonths(), program.getFee(), program.getEnrollments()));
+                    try {
+                        String paymentText = paymentLabel.getText().replace("Payment: ", "").trim();
+                        enrolment.setPayment(Double.parseDouble(paymentText));
+                    } catch (NumberFormatException e) {
+                        // Handle the error, e.g., log it or show an alert to the user
+                        showAlert(Alert.AlertType.ERROR, "Invalid Payment", "The payment amount is not a valid number.");
+                    }
+                    enrolment.setRegistrationDate(LocalDate.now());
+                    enrolment.setStudent(new StudentDTO(student.getId(),student.getFirstName(),student.getLastName(),student.getAddress(),student.getEmail(),student.getPhone(),student.getEnrollments()));
+                    enrolmentDTOList.add(enrolment);
+                }
+            }
+        }
+
+        // Update the student object
+
+        student.setEnrollments(enrolmentDTOList);
+        studentBO.updateStudent(student);
+        enrollmentsBO.updateEnrolments(enrolmentDTOList);
+        // Update student via BO
+
+
+        // Show success message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText("Student updated successfully!");
+        alert.showAndWait();
+
+        // Clear fields
+        clearFields();
+
+        // Redirect to the student list view
+        dashboardController.loadView("students");
+    }
+
+    @FXML
+    public void backBtnOnAction(ActionEvent actionEvent) {
+        dashboardController.loadView("students");
+    }
 
 }
+

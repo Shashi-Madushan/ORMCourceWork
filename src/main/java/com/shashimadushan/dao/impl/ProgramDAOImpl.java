@@ -10,87 +10,96 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class ProgramDAOImpl implements ProgramDAO {
+
     @Override
     public void addProgram(Program program) {
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        session.save(program);
-
-        transaction.commit();
-        session.close();
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            session.save(program);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
     }
 
     @Override
     public List<Program> getAllPrograms() {
-        List<Program> programs;
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        programs = session.createQuery("FROM Program", Program.class).list();
-
-        transaction.commit();
-        session.close();
-
+        List<Program> programs = null;
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            programs = session.createQuery("FROM Program", Program.class).list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
         return programs;
     }
 
     @Override
     public void updateProgram(Program program) {
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        session.update(program);
-
-        transaction.commit();
-        session.close();
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            session.update(program);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteProgram(Program program) {
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        session.delete(program);
-
-        transaction.commit();
-        session.close();
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            session.delete(program);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public Program getProgram(String programId){
+    public Program getProgram(String programId) {
         Program culinaryProgram = null;
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        culinaryProgram = session.get(Program.class, programId);
-
-        transaction.commit();
-        session.close();
-
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            culinaryProgram = session.get(Program.class, programId);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
         return culinaryProgram;
     }
+
     @Override
-    public Long getProgramCount(){
+    public Long getProgramCount() {
         Long count = 0L;
-        Session session = FactoryConfiguration.getInstance().getSession();
-        Transaction transaction = session.beginTransaction();
-
-        String hql = "SELECT COUNT(c) FROM Program c";
-        Query<Long> query = session.createQuery(hql, Long.class);
-
-        count = query.uniqueResult();
-
-        transaction.commit();
-        session.close();
-
+        Transaction transaction = null;
+        try (Session session = FactoryConfiguration.getInstance().getSession()) {
+            transaction = session.beginTransaction();
+            String hql = "SELECT COUNT(c) FROM Program c";
+            Query<Long> query = session.createQuery(hql, Long.class);
+            count = query.uniqueResult();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            e.printStackTrace();
+        }
         return count;
     }
 
-
     @Override
     public List<Program> searchPrograms(String query) {
+        // Implement search logic here if needed
         return List.of();
     }
-
 }

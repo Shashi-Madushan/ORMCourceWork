@@ -25,9 +25,9 @@
                               <Font name="Cambria" size="33.0" />
                            </font>
                         </Label>
-                        <Label fx:id="userNameLbel" layoutX="130.0" layoutY="30.0" text="Admin" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="30.0">
+                        <Label fx:id="userNameLbel" layoutX="130.0" layoutY="14.0" prefHeight="34.0" prefWidth="137.0" text="Admin" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="14.0">
                            <font>
-                              <Font name="Calibri" size="16.0" />
+                              <Font name="Calibri" size="26.0" />
                            </font>
                         </Label>
                         <Label layoutX="22.0" layoutY="66.0" text="Wellcome Back" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="22.0">
@@ -49,34 +49,6 @@
                         </DropShadow>
                      </effect>
                   </AnchorPane>
-                  <AnchorPane layoutX="14.0" layoutY="146.0" prefHeight="64.0" prefWidth="237.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" AnchorPane.leftAnchor="15.0">
-                     <children>
-                        <Label layoutX="22.0" layoutY="24.0" text="Total Students" AnchorPane.leftAnchor="21.0">
-                           <font>
-                              <Font name="Cambria" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="totalstudenLbl" layoutX="132.0" layoutY="24.0" text="10" AnchorPane.leftAnchor="150.0">
-                           <font>
-                              <Font name="Cambria" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane layoutX="14.0" layoutY="219.0" prefHeight="64.0" prefWidth="237.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" AnchorPane.leftAnchor="15.0">
-                     <children>
-                        <Label layoutX="21.0" layoutY="24.0" text="Programs" AnchorPane.leftAnchor="21.0">
-                           <font>
-                              <Font name="Cambria" size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="totalProgrmsLbl" layoutX="135.0" layoutY="24.0" text="5" AnchorPane.leftAnchor="150.0">
-                           <font>
-                              <Font name="Cambria" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
                   <ImageView fitHeight="101.0" fitWidth="131.0" layoutX="5.0" layoutY="323.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="2.75">
                      <image>
                         <Image url="@../assets/open-doodles-reading-side.gif" />
@@ -86,14 +58,34 @@
             </AnchorPane>
             <VBox maxWidth="350.0" prefHeight="442.0" prefWidth="215.0" spacing="10.0" style="-fx-background-color: #6189F899; -fx-background-radius: 15; -fx-border-radius: 15;" HBox.hgrow="ALWAYS">
                <children>
-                  <AnchorPane maxHeight="300.0" prefHeight="84.0" prefWidth="204.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" VBox.vgrow="ALWAYS">
-                     <effect>
-                        <DropShadow>
-                           <color>
-                              <Color red="0.3803921639919281" green="0.5372549295425415" blue="0.9725490212440491" />
-                           </color>
-                        </DropShadow>
-                     </effect></AnchorPane>
+                  <AnchorPane prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
+                     <children>
+                        <Label layoutX="21.0" layoutY="16.0" text="Programs" AnchorPane.leftAnchor="21.0">
+                           <font>
+                              <Font name="Cambria" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalProgrmsLbl" layoutX="114.0" layoutY="16.0" text="5" AnchorPane.leftAnchor="114.0">
+                           <font>
+                              <Font name="Cambria" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="50.0" prefWidth="160.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;">
+                     <children>
+                        <Label layoutX="19.0" layoutY="16.0" text="Total Students" AnchorPane.leftAnchor="19.0">
+                           <font>
+                              <Font name="Cambria" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="totalstudenLbl" layoutX="128.0" layoutY="16.0" text="10" AnchorPane.leftAnchor="128.0">
+                           <font>
+                              <Font name="Cambria" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane prefHeight="282.0" prefWidth="200.0" style="-fx-background-color: #f6f6f6; -fx-background-radius: 15; -fx-border-radius: 15;" VBox.vgrow="ALWAYS">
                      <children>
                         <Label layoutX="20.0" layoutY="14.0" text="Quick Access" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="14.0">

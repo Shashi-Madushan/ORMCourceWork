@@ -22,11 +22,12 @@ public class Enrolment {
 
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "FK_STUDENT"))
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "program_id", nullable = false)
+    @JoinColumn(name = "program_id", foreignKey = @ForeignKey(name = "FK_PROGRAM"))
     private Program program;
+
 
 }

@@ -7,11 +7,11 @@ import lombok.Data;
 
 import java.time.LocalDate;
 @Data
-public class EnrolmetDTO {
+public class EnrolmentDTO {
 
     private int id;
     private LocalDate registrationDate;
     private double payment;
-    private Student student;
-    private Program program;
+    private StudentDTO student;
+    private ProgramDTO program;
 }

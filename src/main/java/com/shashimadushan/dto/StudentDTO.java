@@ -22,5 +22,7 @@ public class StudentDTO {
     private String email;
     private String phone;
 
-    private List<Enrolment> enrollments;
+    private List<EnrolmentDTO> enrollments;
+
+
 }
