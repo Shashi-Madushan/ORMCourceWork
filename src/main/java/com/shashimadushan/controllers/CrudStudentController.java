@@ -81,95 +81,122 @@ public class CrudStudentController {
         addBtn.setVisible(false);
     }
 
- private void populateStudentInfo() {
-    if (infoStudentDto != null) {
-        isPopulating = true;
-        studentIdTxtField.setText(infoStudentDto.getId());
-        fnameTxtField.setText(infoStudentDto.getFirstName());
-        lnameTxtField.setText(infoStudentDto.getLastName());
-        addressTxtField.setText(infoStudentDto.getAddress());
-        emailTxtField.setText(infoStudentDto.getEmail());
-        tpTxtField.setText(infoStudentDto.getPhone());
+private void loadPrograms() {
+    List<ProgramDTO> programDTOS = programBO.getAllPrograms();
+    programsVbox.getChildren().clear();
+    programsVbox.getStyleClass().add("vbox-container"); // Apply VBox style
 
-        List<EnrolmentDTO> enrollments = infoStudentDto.getEnrollments();
-        if (enrollments != null) {
-            for (EnrolmentDTO enrolment : enrollments) {
-                ProgramDTO program = enrolment.getProgram();
-                if (program != null) {
-                    for (Node node : programsVbox.getChildren()) {
-                        if (node instanceof HBox hbox) {
-                            CheckBox checkBox = null;
-                            Label paymentLabel = null;
+    for (ProgramDTO programDTO : programDTOS) {
+        HBox hbox = new HBox();
+        hbox.setSpacing(10);
+        hbox.getStyleClass().add("hbox-container"); // Apply HBox style
 
-                            for (Node childNode : hbox.getChildren()) {
-                                if (childNode instanceof CheckBox cb && cb.getId().equals(program.getProgramId())) {
-                                    checkBox = cb;
+        CheckBox checkBox = new CheckBox(programDTO.getName());
+        checkBox.getStyleClass().add("check-box"); // Apply CheckBox style
+
+        Label paymentLabel = new Label("Payed: 0.0"); // Default payment
+        paymentLabel.getStyleClass().add("label"); // Apply Label style
+
+        Label remainingLabel = new Label("Remaining: " + programDTO.getFee());
+        remainingLabel.getStyleClass().add("label"); // Apply Label style
+
+        checkBox.setId(programDTO.getProgramId());
+        checkBox.setUserData(programDTO);
+
+        // Event listener to handle checkbox selection
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue && !isPopulating) {
+                double payment = popupForPayment(programDTO);
+                programPayments.put(programDTO.getProgramId(), payment);
+                paymentLabel.setText("Payed: " + payment);
+                double remaining = programDTO.getFee() - payment;
+                remainingLabel.setText("Remaining: " + remaining);
+            } else {
+                programPayments.remove(programDTO.getProgramId());
+                paymentLabel.setText("Payed: 0.0");
+                remainingLabel.setText("Remaining: " + programDTO.getFee());
+            }
+        });
+
+        hbox.getChildren().addAll(checkBox, paymentLabel, remainingLabel);
+        programsVbox.getChildren().add(hbox);
+    }
+}
+
+    private void populateStudentInfo() {
+        if (infoStudentDto != null) {
+            isPopulating = true;
+            studentIdTxtField.setText(infoStudentDto.getId());
+            fnameTxtField.setText(infoStudentDto.getFirstName());
+            lnameTxtField.setText(infoStudentDto.getLastName());
+            addressTxtField.setText(infoStudentDto.getAddress());
+            emailTxtField.setText(infoStudentDto.getEmail());
+            tpTxtField.setText(infoStudentDto.getPhone());
+
+            List<EnrolmentDTO> enrollments = infoStudentDto.getEnrollments();
+            if (enrollments != null) {
+                for (EnrolmentDTO enrolment : enrollments) {
+                    ProgramDTO program = enrolment.getProgram();
+                    if (program != null) {
+                        for (Node node : programsVbox.getChildren()) {
+                            if (node instanceof HBox hbox) {
+                                CheckBox checkBox = null;
+                                Label paymentLabel = null;
+                                Label remainingLabel = null;
+
+                                for (Node childNode : hbox.getChildren()) {
+                                    if (childNode instanceof CheckBox cb && cb.getId().equals(program.getProgramId())) {
+                                        checkBox = cb;
+                                    }
+                                    if (childNode instanceof Label label) {
+                                        if (label.getText().startsWith("Payed:")) {
+                                            paymentLabel = label;
+                                        } else if (label.getText().startsWith("Remaining:")) {
+                                            remainingLabel = label;
+                                        }
+                                    }
                                 }
-                                if (childNode instanceof Label label) {
-                                    paymentLabel = label;
-                                }
-                            }
 
-                            if (checkBox != null && paymentLabel != null) {
-                                checkBox.setSelected(true);
-                                programPayments.put(program.getProgramId(), enrolment.getPayment());
-                                paymentLabel.setText("Payment: " + enrolment.getPayment());
+                                if (checkBox != null && paymentLabel != null && remainingLabel != null) {
+                                    checkBox.setSelected(true);
+                                    double payment = enrolment.getPayment();
+                                    programPayments.put(program.getProgramId(), payment);
+                                    paymentLabel.setText("Payed: " + payment);
+                                    double remaining = program.getFee() - payment;
+                                    remainingLabel.setText("Remaining: " + remaining);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        isPopulating = false; // End programmatic update
-    }
-}
-    private void loadPrograms() {
-        List<ProgramDTO> programDTOS = programBO.getAllPrograms();
-        programsVbox.getChildren().clear();
-
-        for (ProgramDTO programDTO : programDTOS) {
-            HBox hbox = new HBox();
-            hbox.setSpacing(10);
-            CheckBox checkBox = new CheckBox(programDTO.getName());
-            Label paymentLabel = new Label("Payment: 0.0"); // Default payment
-
-
-            checkBox.setId(programDTO.getProgramId());
-            checkBox.setUserData(programDTO);
-
-            // Event listener to handle checkbox selection
-            checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue && !isPopulating) {
-                    double payment = popupForPayment(programDTO.getName());
-                    programPayments.put(programDTO.getProgramId(), payment);
-                    paymentLabel.setText("Payment: " + payment);
-                } else {
-                    programPayments.remove(programDTO.getProgramId());
-                    paymentLabel.setText("Payment: 0.0");
-                }
-            });
-
-            hbox.getChildren().addAll(checkBox, paymentLabel);
-            programsVbox.getChildren().add(hbox);
+            isPopulating = false; // End programmatic update
         }
     }
 
-    private double popupForPayment(String programName) {
+    private double popupForPayment(ProgramDTO program) {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Enter Payment");
-        dialog.setHeaderText("Enter payment for the program: " + programName);
-        dialog.setContentText("Payment:");
+        dialog.setHeaderText("Enter payment for the program: " + program.getName());
+        dialog.setContentText("Current Fee: " + program.getFee() + "\nPayment:");
 
-        Optional<String> result = dialog.showAndWait();
-        try {
-            return result.map(Double::parseDouble).orElse(0.0);
-        } catch (NumberFormatException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText(null);
-            alert.setContentText("Please enter a valid number.");
-            alert.showAndWait();
-            return 0.0;
+        while (true) {
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                String input = result.get().trim();
+                try {
+                    return Double.parseDouble(input);
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Invalid Input");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please enter a valid number.");
+                    alert.showAndWait();
+                }
+            } else {
+                // User cancelled the dialog
+                return 0.0;
+            }
         }
     }
 
@@ -340,14 +367,14 @@ public class CrudStudentController {
                     EnrolmentDTO enrolment = new EnrolmentDTO();
                     enrolment.setProgram(new ProgramDTO(program.getProgramId(), program.getName(), program.getDurationMonths(), program.getFee(), program.getEnrollments()));
                     try {
-                        String paymentText = paymentLabel.getText().replace("Payment: ", "").trim();
+                        String paymentText = paymentLabel.getText().replace("Payed: ", "").trim();
                         enrolment.setPayment(Double.parseDouble(paymentText));
                     } catch (NumberFormatException e) {
                         // Handle the error, e.g., log it or show an alert to the user
                         showAlert(Alert.AlertType.ERROR, "Invalid Payment", "The payment amount is not a valid number.");
                     }
                     enrolment.setRegistrationDate(LocalDate.now());
-                    enrolment.setStudent(new StudentDTO(student.getId(),student.getFirstName(),student.getLastName(),student.getAddress(),student.getEmail(),student.getPhone(),student.getEnrollments()));
+                    enrolment.setStudent(new StudentDTO(student.getId(), student.getFirstName(), student.getLastName(), student.getAddress(), student.getEmail(), student.getPhone(), student.getEnrollments()));
                     enrolmentDTOList.add(enrolment);
                 }
             }

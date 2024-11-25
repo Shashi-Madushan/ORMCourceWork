@@ -75,7 +75,7 @@
                               <Font name="Arial" size="16.0" />
                            </font>
                         </Label>
-                        <VBox fx:id="programsVbox" layoutX="23.0" layoutY="50.0" prefHeight="314.0" prefWidth="279.0" spacing="10.0" style="-fx-background-color: #F5F5F5; -fx-background-radius: 12; -fx-border-radius: 12;" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="50.0" />
+                        <VBox fx:id="programsVbox" layoutX="23.0" layoutY="50.0" prefHeight="314.0" prefWidth="279.0" spacing="10.0" styleClass="vbox-container" stylesheets="@../styles/hboxVboxStyles.css" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="50.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane maxHeight="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-radius: 15;" VBox.vgrow="ALWAYS">

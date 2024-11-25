@@ -21,6 +21,8 @@ import lombok.Data;
 
 import java.util.List;
 
+import static com.shashimadushan.utils.GlobelVars.userRole;
+
 @Data
 public class ProgramsHomeController {
     DashboardController dashboardController;
@@ -52,7 +54,10 @@ public class ProgramsHomeController {
     public void initialize() {
 
         loadData();
-        addButtonToTable();
+        if (userRole.equals("Admin")) {
+            addButtonToTable();
+        }
+
         addTooltipToTable();
         addDoubleClickEventToTable();
         setupProgramSearchFilter();

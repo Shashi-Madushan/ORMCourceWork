@@ -1,0 +1,41 @@
+/* VBox Style */
+.vbox-container {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px; /* Space between children */
+}
+
+/* HBox Style */
+.hbox-container {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px; /* Space between children */
+}
+
+/* HBox Hover Effect */
+.hbox-container:hover {
+    -fx-background-color: #e4ffe4; /* Light blue on hover */
+    -fx-cursor: hand;
+}
+
+/* CheckBox Style */
+.check-box {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-padding: 5px;
+}
+
+/* Label Style */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-padding: 5px;
+}

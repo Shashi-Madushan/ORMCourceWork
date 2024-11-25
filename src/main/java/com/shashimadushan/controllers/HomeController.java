@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import lombok.Data;
 
 import static com.shashimadushan.utils.GlobelVars.userNameVar;
+import static com.shashimadushan.utils.GlobelVars.userRole;
 
 @Data
 public class HomeController {
@@ -38,6 +39,11 @@ public class HomeController {
     ProgramBO programBO = (ProgramBO) BOFactory.getBO(BOFactory.BOType.PROGRAM);
 
     public void initialize() {
+        if (userRole.equals("Admin")) {
+           newProgramBtn.setVisible(true);
+        }else{
+            newProgramBtn.setVisible(false);
+        }
         userNameLbel.setText(userNameVar);
        totalstudenLbl.setText(String.valueOf(studentBO.getStudentCount()));
        totalProgrmsLbl.setText(String.valueOf(programBO.getProgramCount()));
